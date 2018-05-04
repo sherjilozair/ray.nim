@@ -1,4 +1,4 @@
-import raylib/libraylib
+import raylib/raylib
 
 let
   screenWidth = 1440.cint
