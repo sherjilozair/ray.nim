@@ -232,6 +232,7 @@ type
 
   CameraType* {.size: sizeof(cint).} = enum
     CAMERA_PERSPECTIVE = 0, CAMERA_ORTHOGRAPHIC
+
   Camera* {.bycopy.} = object
     position*: Vector3
     target*: Vector3
@@ -305,6 +306,7 @@ type
     format*: cint
 
   Music* = ptr object
+
   AudioStream* {.bycopy.} = object
     sampleRate*: cuint
     sampleSize*: cuint
@@ -328,6 +330,7 @@ type
 
   LogType* {.size: sizeof(cint).} = enum
     LOG_INFO = 1, LOG_WARNING = 2, LOG_ERROR = 4, LOG_DEBUG = 8, LOG_OTHER = 16
+
   ShaderLocationIndex* {.size: sizeof(cint).} = enum
     LOC_VERTEX_POSITION = 0, LOC_VERTEX_TEXCOORD01, LOC_VERTEX_TEXCOORD02,
     LOC_VERTEX_NORMAL, LOC_VERTEX_TANGENT, LOC_VERTEX_COLOR, LOC_MATRIX_MVP,
@@ -336,9 +339,11 @@ type
     LOC_MAP_METALNESS, LOC_MAP_NORMAL, LOC_MAP_ROUGHNESS, LOC_MAP_OCCLUSION,
     LOC_MAP_EMISSION, LOC_MAP_HEIGHT, LOC_MAP_CUBEMAP, LOC_MAP_IRRADIANCE,
     LOC_MAP_PREFILTER, LOC_MAP_BRDF
+
   TexmapIndex* {.size: sizeof(cint).} = enum
     MAP_ALBEDO = 0, MAP_METALNESS = 1, MAP_NORMAL = 2, MAP_ROUGHNESS = 3, MAP_OCCLUSION,
     MAP_EMISSION, MAP_HEIGHT, MAP_CUBEMAP, MAP_IRRADIANCE, MAP_PREFILTER, MAP_BRDF
+
   PixelFormat* {.size: sizeof(cint).} = enum
     UNCOMPRESSED_GRAYSCALE = 1, UNCOMPRESSED_GRAY_ALPHA, UNCOMPRESSED_R5G6B5,
     UNCOMPRESSED_R8G8B8, UNCOMPRESSED_R5G5B5A1, UNCOMPRESSED_R4G4B4A4,
@@ -347,35 +352,30 @@ type
     COMPRESSED_DXT3_RGBA, COMPRESSED_DXT5_RGBA, COMPRESSED_ETC1_RGB,
     COMPRESSED_ETC2_RGB, COMPRESSED_ETC2_EAC_RGBA, COMPRESSED_PVRT_RGB,
     COMPRESSED_PVRT_RGBA, COMPRESSED_ASTC_4x4_RGBA, COMPRESSED_ASTC_8x8_RGBA
+
   TextureFilterMode* {.size: sizeof(cint).} = enum
     FILTER_POINT = 0, FILTER_BILINEAR, FILTER_TRILINEAR, FILTER_ANISOTROPIC_4X,
     FILTER_ANISOTROPIC_8X, FILTER_ANISOTROPIC_16X
+
   TextureWrapMode* {.size: sizeof(cint).} = enum
     WRAP_REPEAT = 0, WRAP_CLAMP, WRAP_MIRROR
+
   BlendMode* {.size: sizeof(cint).} = enum
     BLEND_ALPHA = 0, BLEND_ADDITIVE, BLEND_MULTIPLIED
+
   Gestures* {.size: sizeof(cint).} = enum
     GESTURE_NONE = 0, GESTURE_TAP = 1, GESTURE_DOUBLETAP = 2, GESTURE_HOLD = 4,
     GESTURE_DRAG = 8, GESTURE_SWIPE_RIGHT = 16, GESTURE_SWIPE_LEFT = 32,
     GESTURE_SWIPE_UP = 64, GESTURE_SWIPE_DOWN = 128, GESTURE_PINCH_IN = 256,
     GESTURE_PINCH_OUT = 512
+
   CameraMode* {.size: sizeof(cint).} = enum
     CAMERA_CUSTOM = 0, CAMERA_FREE, CAMERA_ORBITAL, CAMERA_FIRST_PERSON,
     CAMERA_THIRD_PERSON
+
   VrDeviceType* {.size: sizeof(cint).} = enum
     HMD_DEFAULT_DEVICE = 0, HMD_OCULUS_RIFT_DK2, HMD_OCULUS_RIFT_CV1, HMD_OCULUS_GO,
     HMD_VALVE_HTC_VIVE, HMD_SONY_PSVR
-
-
-
-
-
-
-
-
-
-
-
 
 
 proc InitWindow*(width: cint; height: cint; title: cstring) {.stdcall,
@@ -1056,9 +1056,3 @@ proc SetAudioStreamPitch*(stream: AudioStream; pitch: cfloat) {.stdcall,
 ## #define BLANK      CLITERAL{ 0, 0, 0, 0 }           // Blank (Transparent)
 ## #define MAGENTA    CLITERAL{ 255, 0, 255, 255 }     // Magenta
 ## #define RAYWHITE   CLITERAL{ 245, 245, 245, 255 }   // My own White (raylib logo)
-
-let
-  RAYWHITE* = Color(r: 245.cuchar, g: 245.cuchar, b: 245.cuchar, a: 255.cuchar)
-  LIGHTGRAY* = Color(r: 200.cuchar, g: 200.cuchar, b: 200.cuchar, a: 255.cuchar)
-  DARKGRAY* = Color(r: 80.cuchar, g: 80.cuchar, b: 80.cuchar, a: 255.cuchar)
-  RED* = Color(r: 230.cuchar, g: 41.cuchar, b: 55.cuchar, a: 255.cuchar)
