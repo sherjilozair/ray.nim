@@ -23,84 +23,6 @@ const
   FLAG_WINDOW_TRANSPARENT* = 16
   FLAG_MSAA_4X_HINT* = 32
   FLAG_VSYNC_HINT* = 64
-  KEY_SPACE* = 32
-  KEY_ESCAPE* = 256
-  KEY_ENTER* = 257
-  KEY_TAB* = 258
-  KEY_BACKSPACE* = 259
-  KEY_INSERT* = 260
-  KEY_DELETE* = 261
-  KEY_RIGHT* = 262
-  KEY_LEFT* = 263
-  KEY_DOWN* = 264
-  KEY_UP* = 265
-  KEY_PAGE_UP* = 266
-  KEY_PAGE_DOWN* = 267
-  KEY_HOME* = 268
-  KEY_END* = 269
-  KEY_CAPS_LOCK* = 280
-  KEY_SCROLL_LOCK* = 281
-  KEY_NUM_LOCK* = 282
-  KEY_PRINT_SCREEN* = 283
-  KEY_PAUSE* = 284
-  KEY_F1* = 290
-  KEY_F2* = 291
-  KEY_F3* = 292
-  KEY_F4* = 293
-  KEY_F5* = 294
-  KEY_F6* = 295
-  KEY_F7* = 296
-  KEY_F8* = 297
-  KEY_F9* = 298
-  KEY_F10* = 299
-  KEY_F11* = 300
-  KEY_F12* = 301
-  KEY_LEFT_SHIFT* = 340
-  KEY_LEFT_CONTROL* = 341
-  KEY_LEFT_ALT* = 342
-  KEY_RIGHT_SHIFT* = 344
-  KEY_RIGHT_CONTROL* = 345
-  KEY_RIGHT_ALT* = 346
-  KEY_ZERO* = 48
-  KEY_ONE* = 49
-  KEY_TWO* = 50
-  KEY_THREE* = 51
-  KEY_FOUR* = 52
-  KEY_FIVE* = 53
-  KEY_SIX* = 54
-  KEY_SEVEN* = 55
-  KEY_EIGHT* = 56
-  KEY_NINE* = 57
-  KEY_A* = 65
-  KEY_B* = 66
-  KEY_C* = 67
-  KEY_D* = 68
-  KEY_E* = 69
-  KEY_F* = 70
-  KEY_G* = 71
-  KEY_H* = 72
-  KEY_I* = 73
-  KEY_J* = 74
-  KEY_K* = 75
-  KEY_L* = 76
-  KEY_M* = 77
-  KEY_N* = 78
-  KEY_O* = 79
-  KEY_P* = 80
-  KEY_Q* = 81
-  KEY_R* = 82
-  KEY_S* = 83
-  KEY_T* = 84
-  KEY_U* = 85
-  KEY_V* = 86
-  KEY_W* = 87
-  KEY_X* = 88
-  KEY_Y* = 89
-  KEY_Z* = 90
-  KEY_BACK* = 4
-  KEY_MENU* = 82
-  KEY_VOLUME_UP* = 24
-  KEY_VOLUME_DOWN* = 25
   MOUSE_LEFT_BUTTON* = 0
   MOUSE_RIGHT_BUTTON* = 1
   MOUSE_MIDDLE_BUTTON* = 2
@@ -230,15 +152,12 @@ type
     charsCount*: cint
     chars*: ptr CharInfo
 
-  CameraType* {.size: sizeof(cint).} = enum
-    CAMERA_PERSPECTIVE = 0, CAMERA_ORTHOGRAPHIC
-
   Camera* {.bycopy.} = object
     position*: Vector3
     target*: Vector3
     up*: Vector3
     fovy*: cfloat
-    `type`*: CameraType
+    `type`*: cint
 
   Camera2D* {.bycopy.} = object
     offset*: Vector2
@@ -328,106 +247,39 @@ type
     lensDistortionValues*: array[4, cfloat]
     chromaAbCorrection*: array[4, cfloat]
 
-  LogType* {.size: sizeof(cint).} = enum
-    LOG_INFO = 1, LOG_WARNING = 2, LOG_ERROR = 4, LOG_DEBUG = 8, LOG_OTHER = 16
-
-  ShaderLocationIndex* {.size: sizeof(cint).} = enum
-    LOC_VERTEX_POSITION = 0, LOC_VERTEX_TEXCOORD01, LOC_VERTEX_TEXCOORD02,
-    LOC_VERTEX_NORMAL, LOC_VERTEX_TANGENT, LOC_VERTEX_COLOR, LOC_MATRIX_MVP,
-    LOC_MATRIX_MODEL, LOC_MATRIX_VIEW, LOC_MATRIX_PROJECTION, LOC_VECTOR_VIEW,
-    LOC_COLOR_DIFFUSE, LOC_COLOR_SPECULAR, LOC_COLOR_AMBIENT, LOC_MAP_ALBEDO,
-    LOC_MAP_METALNESS, LOC_MAP_NORMAL, LOC_MAP_ROUGHNESS, LOC_MAP_OCCLUSION,
-    LOC_MAP_EMISSION, LOC_MAP_HEIGHT, LOC_MAP_CUBEMAP, LOC_MAP_IRRADIANCE,
-    LOC_MAP_PREFILTER, LOC_MAP_BRDF
-
-  TexmapIndex* {.size: sizeof(cint).} = enum
-    MAP_ALBEDO = 0, MAP_METALNESS = 1, MAP_NORMAL = 2, MAP_ROUGHNESS = 3, MAP_OCCLUSION,
-    MAP_EMISSION, MAP_HEIGHT, MAP_CUBEMAP, MAP_IRRADIANCE, MAP_PREFILTER, MAP_BRDF
-
-  PixelFormat* {.size: sizeof(cint).} = enum
-    UNCOMPRESSED_GRAYSCALE = 1, UNCOMPRESSED_GRAY_ALPHA, UNCOMPRESSED_R5G6B5,
-    UNCOMPRESSED_R8G8B8, UNCOMPRESSED_R5G5B5A1, UNCOMPRESSED_R4G4B4A4,
-    UNCOMPRESSED_R8G8B8A8, UNCOMPRESSED_R32, UNCOMPRESSED_R32G32B32,
-    UNCOMPRESSED_R32G32B32A32, COMPRESSED_DXT1_RGB, COMPRESSED_DXT1_RGBA,
-    COMPRESSED_DXT3_RGBA, COMPRESSED_DXT5_RGBA, COMPRESSED_ETC1_RGB,
-    COMPRESSED_ETC2_RGB, COMPRESSED_ETC2_EAC_RGBA, COMPRESSED_PVRT_RGB,
-    COMPRESSED_PVRT_RGBA, COMPRESSED_ASTC_4x4_RGBA, COMPRESSED_ASTC_8x8_RGBA
-
-  TextureFilterMode* {.size: sizeof(cint).} = enum
-    FILTER_POINT = 0, FILTER_BILINEAR, FILTER_TRILINEAR, FILTER_ANISOTROPIC_4X,
-    FILTER_ANISOTROPIC_8X, FILTER_ANISOTROPIC_16X
-
-  TextureWrapMode* {.size: sizeof(cint).} = enum
-    WRAP_REPEAT = 0, WRAP_CLAMP, WRAP_MIRROR
-
-  BlendMode* {.size: sizeof(cint).} = enum
-    BLEND_ALPHA = 0, BLEND_ADDITIVE, BLEND_MULTIPLIED
-
-  Gestures* {.size: sizeof(cint).} = enum
-    GESTURE_NONE = 0, GESTURE_TAP = 1, GESTURE_DOUBLETAP = 2, GESTURE_HOLD = 4,
-    GESTURE_DRAG = 8, GESTURE_SWIPE_RIGHT = 16, GESTURE_SWIPE_LEFT = 32,
-    GESTURE_SWIPE_UP = 64, GESTURE_SWIPE_DOWN = 128, GESTURE_PINCH_IN = 256,
-    GESTURE_PINCH_OUT = 512
-
-  CameraMode* {.size: sizeof(cint).} = enum
-    CAMERA_CUSTOM = 0, CAMERA_FREE, CAMERA_ORBITAL, CAMERA_FIRST_PERSON,
-    CAMERA_THIRD_PERSON
-
-  VrDeviceType* {.size: sizeof(cint).} = enum
-    HMD_DEFAULT_DEVICE = 0, HMD_OCULUS_RIFT_DK2, HMD_OCULUS_RIFT_CV1, HMD_OCULUS_GO,
-    HMD_VALVE_HTC_VIVE, HMD_SONY_PSVR
 
 
-proc InitWindow*(width: cint; height: cint; title: cstring) {.stdcall,
-    importc: "InitWindow", dynlib: dynlibraylib.}
+proc InitWindow*(width: cint; height: cint; title: cstring) {.stdcall, importc: "InitWindow", dynlib: dynlibraylib.}
 proc CloseWindow*() {.stdcall, importc: "CloseWindow", dynlib: dynlibraylib.}
 proc IsWindowReady*(): bool {.stdcall, importc: "IsWindowReady", dynlib: dynlibraylib.}
-proc WindowShouldClose*(): bool {.stdcall, importc: "WindowShouldClose",
-                               dynlib: dynlibraylib.}
-proc IsWindowMinimized*(): bool {.stdcall, importc: "IsWindowMinimized",
-                               dynlib: dynlibraylib.}
+proc WindowShouldClose*(): bool {.stdcall, importc: "WindowShouldClose", dynlib: dynlibraylib.}
+proc IsWindowMinimized*(): bool {.stdcall, importc: "IsWindowMinimized", dynlib: dynlibraylib.}
 proc ToggleFullscreen*() {.stdcall, importc: "ToggleFullscreen", dynlib: dynlibraylib.}
-proc SetWindowIcon*(image: Image) {.stdcall, importc: "SetWindowIcon",
-                                 dynlib: dynlibraylib.}
-proc SetWindowTitle*(title: cstring) {.stdcall, importc: "SetWindowTitle",
-                                    dynlib: dynlibraylib.}
-proc SetWindowPosition*(x: cint; y: cint) {.stdcall, importc: "SetWindowPosition",
-                                       dynlib: dynlibraylib.}
-proc SetWindowMonitor*(monitor: cint) {.stdcall, importc: "SetWindowMonitor",
-                                     dynlib: dynlibraylib.}
-proc SetWindowMinSize*(width: cint; height: cint) {.stdcall,
-    importc: "SetWindowMinSize", dynlib: dynlibraylib.}
-proc SetWindowSize*(width: cint; height: cint) {.stdcall, importc: "SetWindowSize",
-    dynlib: dynlibraylib.}
-proc GetScreenWidth*(): cint {.stdcall, importc: "GetScreenWidth",
-                            dynlib: dynlibraylib.}
-proc GetScreenHeight*(): cint {.stdcall, importc: "GetScreenHeight",
-                             dynlib: dynlibraylib.}
+proc SetWindowIcon*(image: Image) {.stdcall, importc: "SetWindowIcon", dynlib: dynlibraylib.}
+proc SetWindowTitle*(title: cstring) {.stdcall, importc: "SetWindowTitle", dynlib: dynlibraylib.}
+proc SetWindowPosition*(x: cint; y: cint) {.stdcall, importc: "SetWindowPosition", dynlib: dynlibraylib.}
+proc SetWindowMonitor*(monitor: cint) {.stdcall, importc: "SetWindowMonitor", dynlib: dynlibraylib.}
+proc SetWindowMinSize*(width: cint; height: cint) {.stdcall, importc: "SetWindowMinSize", dynlib: dynlibraylib.}
+proc SetWindowSize*(width: cint; height: cint) {.stdcall, importc: "SetWindowSize", dynlib: dynlibraylib.}
+proc GetScreenWidth*(): cint {.stdcall, importc: "GetScreenWidth", dynlib: dynlibraylib.}
+proc GetScreenHeight*(): cint {.stdcall, importc: "GetScreenHeight", dynlib: dynlibraylib.}
 proc ShowCursor*() {.stdcall, importc: "ShowCursor", dynlib: dynlibraylib.}
 proc HideCursor*() {.stdcall, importc: "HideCursor", dynlib: dynlibraylib.}
-proc IsCursorHidden*(): bool {.stdcall, importc: "IsCursorHidden",
-                            dynlib: dynlibraylib.}
+proc IsCursorHidden*(): bool {.stdcall, importc: "IsCursorHidden", dynlib: dynlibraylib.}
 proc EnableCursor*() {.stdcall, importc: "EnableCursor", dynlib: dynlibraylib.}
 proc DisableCursor*() {.stdcall, importc: "DisableCursor", dynlib: dynlibraylib.}
-proc ClearBackground*(color: Color) {.stdcall, importc: "ClearBackground",
-                                   dynlib: dynlibraylib.}
+proc ClearBackground*(color: Color) {.stdcall, importc: "ClearBackground", dynlib: dynlibraylib.}
 proc BeginDrawing*() {.stdcall, importc: "BeginDrawing", dynlib: dynlibraylib.}
 proc EndDrawing*() {.stdcall, importc: "EndDrawing", dynlib: dynlibraylib.}
-proc Begin2dMode*(camera: Camera2D) {.stdcall, importc: "Begin2dMode",
-                                   dynlib: dynlibraylib.}
+proc Begin2dMode*(camera: Camera2D) {.stdcall, importc: "Begin2dMode", dynlib: dynlibraylib.}
 proc End2dMode*() {.stdcall, importc: "End2dMode", dynlib: dynlibraylib.}
-proc Begin3dMode*(camera: Camera) {.stdcall, importc: "Begin3dMode",
-                                 dynlib: dynlibraylib.}
+proc Begin3dMode*(camera: Camera) {.stdcall, importc: "Begin3dMode", dynlib: dynlibraylib.}
 proc End3dMode*() {.stdcall, importc: "End3dMode", dynlib: dynlibraylib.}
-proc BeginTextureMode*(target: RenderTexture2D) {.stdcall,
-    importc: "BeginTextureMode", dynlib: dynlibraylib.}
+proc BeginTextureMode*(target: RenderTexture2D) {.stdcall, importc: "BeginTextureMode", dynlib: dynlibraylib.}
 proc EndTextureMode*() {.stdcall, importc: "EndTextureMode", dynlib: dynlibraylib.}
-proc GetMouseRay*(mousePosition: Vector2; camera: Camera): Ray {.stdcall,
-    importc: "GetMouseRay", dynlib: dynlibraylib.}
-proc GetWorldToScreen*(position: Vector3; camera: Camera): Vector2 {.stdcall,
-    importc: "GetWorldToScreen", dynlib: dynlibraylib.}
-proc GetCameraMatrix*(camera: Camera): Matrix {.stdcall, importc: "GetCameraMatrix",
-    dynlib: dynlibraylib.}
+proc GetMouseRay*(mousePosition: Vector2; camera: Camera): Ray {.stdcall, importc: "GetMouseRay", dynlib: dynlibraylib.}
+proc GetWorldToScreen*(position: Vector3; camera: Camera): Vector2 {.stdcall, importc: "GetWorldToScreen", dynlib: dynlibraylib.}
+proc GetCameraMatrix*(camera: Camera): Matrix {.stdcall, importc: "GetCameraMatrix", dynlib: dynlibraylib.}
 proc SetTargetFPS*(fps: cint) {.stdcall, importc: "SetTargetFPS", dynlib: dynlibraylib.}
 proc GetFPS*(): cint {.stdcall, importc: "GetFPS", dynlib: dynlibraylib.}
 proc GetFrameTime*(): cfloat {.stdcall, importc: "GetFrameTime", dynlib: dynlibraylib.}
@@ -637,14 +489,12 @@ proc LoadTexture*(fileName: cstring): Texture2D {.stdcall, importc: "LoadTexture
     dynlib: dynlibraylib.}
 proc LoadTextureFromImage*(image: Image): Texture2D {.stdcall,
     importc: "LoadTextureFromImage", dynlib: dynlibraylib.}
-proc LoadRenderTexture*(width: cint; height: cint): RenderTexture2D {.stdcall,
-    importc: "LoadRenderTexture", dynlib: dynlibraylib.}
+proc LoadRenderTexture*(width: cint; height: cint): RenderTexture2D {.stdcall, importc: "LoadRenderTexture", dynlib: dynlibraylib.}
 proc UnloadImage*(image: Image) {.stdcall, importc: "UnloadImage",
                                dynlib: dynlibraylib.}
 proc UnloadTexture*(texture: Texture2D) {.stdcall, importc: "UnloadTexture",
                                        dynlib: dynlibraylib.}
-proc UnloadRenderTexture*(target: RenderTexture2D) {.stdcall,
-    importc: "UnloadRenderTexture", dynlib: dynlibraylib.}
+proc UnloadRenderTexture*(target: RenderTexture2D) {.stdcall, importc: "UnloadRenderTexture", dynlib: dynlibraylib.}
 proc GetImageData*(image: Image): ptr Color {.stdcall, importc: "GetImageData",
     dynlib: dynlibraylib.}
 proc GetPixelDataSize*(width: cint; height: cint; format: cint): cint {.stdcall,
@@ -727,25 +577,15 @@ proc GenImageCellular*(width: cint; height: cint; tileSize: cint): Image {.stdca
     importc: "GenImageCellular", dynlib: dynlibraylib.}
 proc GenTextureMipmaps*(texture: ptr Texture2D) {.stdcall,
     importc: "GenTextureMipmaps", dynlib: dynlibraylib.}
-proc SetTextureFilter*(texture: Texture2D; filterMode: cint) {.stdcall,
-    importc: "SetTextureFilter", dynlib: dynlibraylib.}
+proc SetTextureFilter*(texture: Texture2D; filterMode: cint) {.stdcall, importc: "SetTextureFilter", dynlib: dynlibraylib.}
 proc SetTextureWrap*(texture: Texture2D; wrapMode: cint) {.stdcall,
     importc: "SetTextureWrap", dynlib: dynlibraylib.}
-proc DrawTexture*(texture: Texture2D; posX: cint; posY: cint; tint: Color) {.stdcall,
-    importc: "DrawTexture", dynlib: dynlibraylib.}
-proc DrawTextureV*(texture: Texture2D; position: Vector2; tint: Color) {.stdcall,
-    importc: "DrawTextureV", dynlib: dynlibraylib.}
-proc DrawTextureEx*(texture: Texture2D; position: Vector2; rotation: cfloat;
-                   scale: cfloat; tint: Color) {.stdcall, importc: "DrawTextureEx",
-    dynlib: dynlibraylib.}
-proc DrawTextureRec*(texture: Texture2D; sourceRec: Rectangle; position: Vector2;
-                    tint: Color) {.stdcall, importc: "DrawTextureRec",
-                                 dynlib: dynlibraylib.}
-proc DrawTexturePro*(texture: Texture2D; sourceRec: Rectangle; destRec: Rectangle;
-                    origin: Vector2; rotation: cfloat; tint: Color) {.stdcall,
-    importc: "DrawTexturePro", dynlib: dynlibraylib.}
-proc GetDefaultFont*(): SpriteFont {.stdcall, importc: "GetDefaultFont",
-                                  dynlib: dynlibraylib.}
+proc DrawTexture*(texture: Texture2D; posX: cint; posY: cint; tint: Color) {.stdcall, importc: "DrawTexture", dynlib: dynlibraylib.}
+proc DrawTextureV*(texture: Texture2D; position: Vector2; tint: Color) {.stdcall, importc: "DrawTextureV", dynlib: dynlibraylib.}
+proc DrawTextureEx*(texture: Texture2D; position: Vector2; rotation: cfloat; scale: cfloat; tint: Color) {.stdcall, importc: "DrawTextureEx", dynlib: dynlibraylib.}
+proc DrawTextureRec*(texture: Texture2D; sourceRec: Rectangle; position: Vector2; tint: Color) {.stdcall, importc: "DrawTextureRec", dynlib: dynlibraylib.}
+proc DrawTexturePro*(texture: Texture2D; sourceRec: Rectangle; destRec: Rectangle; origin: Vector2; rotation: cfloat; tint: Color) {.stdcall, importc: "DrawTexturePro", dynlib: dynlibraylib.}
+proc GetDefaultFont*(): SpriteFont {.stdcall, importc: "GetDefaultFont", dynlib: dynlibraylib.}
 proc LoadSpriteFont*(fileName: cstring): SpriteFont {.stdcall,
     importc: "LoadSpriteFont", dynlib: dynlibraylib.}
 proc LoadSpriteFontEx*(fileName: cstring; fontSize: cint; charsCount: cint;
@@ -966,93 +806,34 @@ proc PauseSound*(sound: Sound) {.stdcall, importc: "PauseSound", dynlib: dynlibr
 proc ResumeSound*(sound: Sound) {.stdcall, importc: "ResumeSound",
                                dynlib: dynlibraylib.}
 proc StopSound*(sound: Sound) {.stdcall, importc: "StopSound", dynlib: dynlibraylib.}
-proc IsSoundPlaying*(sound: Sound): bool {.stdcall, importc: "IsSoundPlaying",
-                                       dynlib: dynlibraylib.}
-proc SetSoundVolume*(sound: Sound; volume: cfloat) {.stdcall,
-    importc: "SetSoundVolume", dynlib: dynlibraylib.}
-proc SetSoundPitch*(sound: Sound; pitch: cfloat) {.stdcall, importc: "SetSoundPitch",
-    dynlib: dynlibraylib.}
-proc WaveFormat*(wave: ptr Wave; sampleRate: cint; sampleSize: cint; channels: cint) {.
-    stdcall, importc: "WaveFormat", dynlib: dynlibraylib.}
+proc IsSoundPlaying*(sound: Sound): bool {.stdcall, importc: "IsSoundPlaying", dynlib: dynlibraylib.}
+proc SetSoundVolume*(sound: Sound; volume: cfloat) {.stdcall, importc: "SetSoundVolume", dynlib: dynlibraylib.}
+proc SetSoundPitch*(sound: Sound; pitch: cfloat) {.stdcall, importc: "SetSoundPitch", dynlib: dynlibraylib.}
+proc WaveFormat*(wave: ptr Wave; sampleRate: cint; sampleSize: cint; channels: cint) {.stdcall, importc: "WaveFormat", dynlib: dynlibraylib.}
 proc WaveCopy*(wave: Wave): Wave {.stdcall, importc: "WaveCopy", dynlib: dynlibraylib.}
-proc WaveCrop*(wave: ptr Wave; initSample: cint; finalSample: cint) {.stdcall,
-    importc: "WaveCrop", dynlib: dynlibraylib.}
-proc GetWaveData*(wave: Wave): ptr cfloat {.stdcall, importc: "GetWaveData",
-                                       dynlib: dynlibraylib.}
-proc LoadMusicStream*(fileName: cstring): Music {.stdcall,
-    importc: "LoadMusicStream", dynlib: dynlibraylib.}
-proc UnloadMusicStream*(music: Music) {.stdcall, importc: "UnloadMusicStream",
-                                     dynlib: dynlibraylib.}
-proc PlayMusicStream*(music: Music) {.stdcall, importc: "PlayMusicStream",
-                                   dynlib: dynlibraylib.}
-proc UpdateMusicStream*(music: Music) {.stdcall, importc: "UpdateMusicStream",
-                                     dynlib: dynlibraylib.}
-proc StopMusicStream*(music: Music) {.stdcall, importc: "StopMusicStream",
-                                   dynlib: dynlibraylib.}
-proc PauseMusicStream*(music: Music) {.stdcall, importc: "PauseMusicStream",
-                                    dynlib: dynlibraylib.}
-proc ResumeMusicStream*(music: Music) {.stdcall, importc: "ResumeMusicStream",
-                                     dynlib: dynlibraylib.}
-proc IsMusicPlaying*(music: Music): bool {.stdcall, importc: "IsMusicPlaying",
-                                       dynlib: dynlibraylib.}
-proc SetMusicVolume*(music: Music; volume: cfloat) {.stdcall,
-    importc: "SetMusicVolume", dynlib: dynlibraylib.}
-proc SetMusicPitch*(music: Music; pitch: cfloat) {.stdcall, importc: "SetMusicPitch",
-    dynlib: dynlibraylib.}
-proc SetMusicLoopCount*(music: Music; count: cint) {.stdcall,
-    importc: "SetMusicLoopCount", dynlib: dynlibraylib.}
-proc GetMusicTimeLength*(music: Music): cfloat {.stdcall,
-    importc: "GetMusicTimeLength", dynlib: dynlibraylib.}
-proc GetMusicTimePlayed*(music: Music): cfloat {.stdcall,
-    importc: "GetMusicTimePlayed", dynlib: dynlibraylib.}
-proc InitAudioStream*(sampleRate: cuint; sampleSize: cuint; channels: cuint): AudioStream {.
-    stdcall, importc: "InitAudioStream", dynlib: dynlibraylib.}
-proc UpdateAudioStream*(stream: AudioStream; data: pointer; samplesCount: cint) {.
-    stdcall, importc: "UpdateAudioStream", dynlib: dynlibraylib.}
-proc CloseAudioStream*(stream: AudioStream) {.stdcall, importc: "CloseAudioStream",
-    dynlib: dynlibraylib.}
-proc IsAudioBufferProcessed*(stream: AudioStream): bool {.stdcall,
-    importc: "IsAudioBufferProcessed", dynlib: dynlibraylib.}
-proc PlayAudioStream*(stream: AudioStream) {.stdcall, importc: "PlayAudioStream",
-    dynlib: dynlibraylib.}
-proc PauseAudioStream*(stream: AudioStream) {.stdcall, importc: "PauseAudioStream",
-    dynlib: dynlibraylib.}
-proc ResumeAudioStream*(stream: AudioStream) {.stdcall,
-    importc: "ResumeAudioStream", dynlib: dynlibraylib.}
-proc IsAudioStreamPlaying*(stream: AudioStream): bool {.stdcall,
-    importc: "IsAudioStreamPlaying", dynlib: dynlibraylib.}
-proc StopAudioStream*(stream: AudioStream) {.stdcall, importc: "StopAudioStream",
-    dynlib: dynlibraylib.}
-proc SetAudioStreamVolume*(stream: AudioStream; volume: cfloat) {.stdcall,
-    importc: "SetAudioStreamVolume", dynlib: dynlibraylib.}
-proc SetAudioStreamPitch*(stream: AudioStream; pitch: cfloat) {.stdcall,
-    importc: "SetAudioStreamPitch", dynlib: dynlibraylib.}
-
-##  Some Basic Colors
-## // NOTE: Custom raylib color palette for amazing visuals on WHITE background
-## #define LIGHTGRAY  CLITERAL{ 200, 200, 200, 255 }   // Light Gray
-## #define GRAY       CLITERAL{ 130, 130, 130, 255 }   // Gray
-## #define DARKGRAY   CLITERAL{ 80, 80, 80, 255 }      // Dark Gray
-## #define YELLOW     CLITERAL{ 253, 249, 0, 255 }     // Yellow
-## #define GOLD       CLITERAL{ 255, 203, 0, 255 }     // Gold
-## #define ORANGE     CLITERAL{ 255, 161, 0, 255 }     // Orange
-## #define PINK       CLITERAL{ 255, 109, 194, 255 }   // Pink
-## #define RED        CLITERAL{ 230, 41, 55, 255 }     // Red
-## #define MAROON     CLITERAL{ 190, 33, 55, 255 }     // Maroon
-## #define GREEN      CLITERAL{ 0, 228, 48, 255 }      // Green
-## #define LIME       CLITERAL{ 0, 158, 47, 255 }      // Lime
-## #define DARKGREEN  CLITERAL{ 0, 117, 44, 255 }      // Dark Green
-## #define SKYBLUE    CLITERAL{ 102, 191, 255, 255 }   // Sky Blue
-## #define BLUE       CLITERAL{ 0, 121, 241, 255 }     // Blue
-## #define DARKBLUE   CLITERAL{ 0, 82, 172, 255 }      // Dark Blue
-## #define PURPLE     CLITERAL{ 200, 122, 255, 255 }   // Purple
-## #define VIOLET     CLITERAL{ 135, 60, 190, 255 }    // Violet
-## #define DARKPURPLE CLITERAL{ 112, 31, 126, 255 }    // Dark Purple
-## #define BEIGE      CLITERAL{ 211, 176, 131, 255 }   // Beige
-## #define BROWN      CLITERAL{ 127, 106, 79, 255 }    // Brown
-## #define DARKBROWN  CLITERAL{ 76, 63, 47, 255 }      // Dark Brown
-## #define WHITE      CLITERAL{ 255, 255, 255, 255 }   // White
-## #define BLACK      CLITERAL{ 0, 0, 0, 255 }         // Black
-## #define BLANK      CLITERAL{ 0, 0, 0, 0 }           // Blank (Transparent)
-## #define MAGENTA    CLITERAL{ 255, 0, 255, 255 }     // Magenta
-## #define RAYWHITE   CLITERAL{ 245, 245, 245, 255 }   // My own White (raylib logo)
+proc WaveCrop*(wave: ptr Wave; initSample: cint; finalSample: cint) {.stdcall, importc: "WaveCrop", dynlib: dynlibraylib.}
+proc GetWaveData*(wave: Wave): ptr cfloat {.stdcall, importc: "GetWaveData", dynlib: dynlibraylib.}
+proc LoadMusicStream*(fileName: cstring): Music {.stdcall, importc: "LoadMusicStream", dynlib: dynlibraylib.}
+proc UnloadMusicStream*(music: Music) {.stdcall, importc: "UnloadMusicStream", dynlib: dynlibraylib.}
+proc PlayMusicStream*(music: Music) {.stdcall, importc: "PlayMusicStream", dynlib: dynlibraylib.}
+proc UpdateMusicStream*(music: Music) {.stdcall, importc: "UpdateMusicStream", dynlib: dynlibraylib.}
+proc StopMusicStream*(music: Music) {.stdcall, importc: "StopMusicStream", dynlib: dynlibraylib.}
+proc PauseMusicStream*(music: Music) {.stdcall, importc: "PauseMusicStream", dynlib: dynlibraylib.}
+proc ResumeMusicStream*(music: Music) {.stdcall, importc: "ResumeMusicStream", dynlib: dynlibraylib.}
+proc IsMusicPlaying*(music: Music): bool {.stdcall, importc: "IsMusicPlaying", dynlib: dynlibraylib.}
+proc SetMusicVolume*(music: Music; volume: cfloat) {.stdcall, importc: "SetMusicVolume", dynlib: dynlibraylib.}
+proc SetMusicPitch*(music: Music; pitch: cfloat) {.stdcall, importc: "SetMusicPitch", dynlib: dynlibraylib.}
+proc SetMusicLoopCount*(music: Music; count: cint) {.stdcall, importc: "SetMusicLoopCount", dynlib: dynlibraylib.}
+proc GetMusicTimeLength*(music: Music): cfloat {.stdcall, importc: "GetMusicTimeLength", dynlib: dynlibraylib.}
+proc GetMusicTimePlayed*(music: Music): cfloat {.stdcall, importc: "GetMusicTimePlayed", dynlib: dynlibraylib.}
+proc InitAudioStream*(sampleRate: cuint; sampleSize: cuint; channels: cuint): AudioStream {.stdcall, importc: "InitAudioStream", dynlib: dynlibraylib.}
+proc UpdateAudioStream*(stream: AudioStream; data: pointer; samplesCount: cint) {.stdcall, importc: "UpdateAudioStream", dynlib: dynlibraylib.}
+proc CloseAudioStream*(stream: AudioStream) {.stdcall, importc: "CloseAudioStream", dynlib: dynlibraylib.}
+proc IsAudioBufferProcessed*(stream: AudioStream): bool {.stdcall, importc: "IsAudioBufferProcessed", dynlib: dynlibraylib.}
+proc PlayAudioStream*(stream: AudioStream) {.stdcall, importc: "PlayAudioStream", dynlib: dynlibraylib.}
+proc PauseAudioStream*(stream: AudioStream) {.stdcall, importc: "PauseAudioStream", dynlib: dynlibraylib.}
+proc ResumeAudioStream*(stream: AudioStream) {.stdcall, importc: "ResumeAudioStream", dynlib: dynlibraylib.}
+proc IsAudioStreamPlaying*(stream: AudioStream): bool {.stdcall, importc: "IsAudioStreamPlaying", dynlib: dynlibraylib.}
+proc StopAudioStream*(stream: AudioStream) {.stdcall, importc: "StopAudioStream", dynlib: dynlibraylib.}
+proc SetAudioStreamVolume*(stream: AudioStream; volume: cfloat) {.stdcall, importc: "SetAudioStreamVolume", dynlib: dynlibraylib.}
+proc SetAudioStreamPitch*(stream: AudioStream; pitch: cfloat) {.stdcall, importc: "SetAudioStreamPitch", dynlib: dynlibraylib.}
