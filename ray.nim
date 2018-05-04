@@ -6,7 +6,7 @@ let
 
 var
   x = (screenWidth/2 - 200).cint
-  y = (screenHeight/2-10).cint
+  y = (screenHeight/2 - 10).cint
   fontSize = 20.cint
 
 proc Update() =
