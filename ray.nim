@@ -86,84 +86,24 @@ type
     depth*: Texture2D
   
   Key* {.pure.} = enum
-    back = 4,
-    volume_up = 24,
-    volume_down = 25
-    space = 32,
-    zero = 48,
-    one = 49,
-    two = 50,
-    three = 51,
-    four = 52,
-    five = 53,
-    six = 54,
-    seven = 55,
-    eight = 56,
-    nine = 57,
-    a = 65,
-    b = 66,
-    c = 67,
-    d = 68,
-    e = 69,
-    f = 70,
-    g = 71,
-    h = 72,
-    i = 73,
-    j = 74,
-    k = 75,
-    l = 76,
-    m = 77,
-    n = 78,
-    o = 79,
-    p = 80,
-    q = 81,
-    r = 82,
-    s = 83,
-    t = 84,
-    u = 85,
-    v = 86,
-    w = 87,
-    x = 88,
-    y = 89,
-    z = 90,
-    escape = 256,
-    enter = 257,
-    tab = 258,
-    backspace = 259,
-    insert = 260,
-    delete = 261,
-    right = 262,
-    left = 263,
-    down = 264,
-    up = 265,
-    page_up = 266
-    page_down = 267,
-    home = 268,
-    endkey = 269,
-    caps_lock = 280,
-    scroll_lock = 281,
-    num_lock = 282,
-    print_screen = 283,
-    pause = 284,
-    f1 = 290,
-    f2 = 291,
-    f3 = 292,
-    f4 = 293,
-    f5 = 294,
-    f6 = 295,
-    f7 = 296,
-    f8 = 297,
-    f9 = 298,
-    f10 = 299,
-    f11 = 300,
-    f12 = 301,
-    left_shift = 340,
-    left_control = 341,
-    left_alt = 342,
-    right_shift = 344,
-    right_control = 345,
-    right_alt = 346,
-
+    back = 4, volume_up = 24, volume_down, space = 32,
+    zero = 48, one, two, three, four, five, six, seven, eight, nine,
+    a = 65, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z
+    escape = 256, enter, tab, backspace,
+    insert = 260, delete, right, left, down, up, page_up, page_down, home, endkey,
+    caps_lock = 280, scroll_lock, num_lock, print_screen, pause,
+    f1 = 290, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12,
+    left_shift = 340, left_control, left_alt, right_shift, right_control, right_alt
+  
+  Flag* {.pure.} = enum
+    show_logo = 1
+    fullscreen_mode = 2
+    window_resizable = 4
+    window_decorated = 8
+    window_trasparent = 16
+    msaa_4x_hint = 32
+    vsync_hint = 64
+    
 
 let
   WHITE* = Color(r: 255, g: 255, b:255, a:255)
@@ -172,33 +112,39 @@ let
   DARKGRAY* = Color(r: 80, g: 80, b: 80, a: 255)
   RED* = Color(r: 230, g: 41, b: 55, a: 255)
   BLACK* = Color(r: 0, g: 0, b: 0, a: 255)
+  BLANK* = Color(r: 0, g: 0, b: 0, a: 0)
 
-proc to_native(color: Color): raylib.Color =
+proc to_c(color: Color): raylib.Color =
   return raylib.Color(r: color.r.cuchar, g: color.g.cuchar, b: color.b.cuchar, a: color.a.cuchar)
 
-proc to_native(t: Texture2D): raylib.Texture2D =
+proc to_c(t: Texture2D): raylib.Texture2D =
   return raylib.Texture2D(id: t.id.cuint, width: t.w.cint, height: t.h.cint, mipmaps: t.mipmaps.cint, format: ord(t.format).cint)
 
-proc to_native(p: Vector2): raylib.Vector2 = 
+proc to_c(p: Vector2): raylib.Vector2 = 
   return raylib.Vector2(x: p.x.cfloat, y: p.y.cfloat)
 
-proc to_native(rect: Rectangle): raylib.Rectangle = 
+proc to_c(rect: Rectangle): raylib.Rectangle = 
   return raylib.Rectangle(x: rect.x.cint, y: rect.y.cint, width: rect.w.cint, height: rect.h.cint)
 
-proc to_native(t: RenderTexture2D): raylib.RenderTexture2D =
-  return raylib.RenderTexture2D(id: t.id.cuint, texture: to_native(t.texture), depth: to_native(t.depth))
+proc to_c(t: RenderTexture2D): raylib.RenderTexture2D =
+  return raylib.RenderTexture2D(id: t.id.cuint, texture: to_c(t.texture), depth: to_c(t.depth))
 
-proc from_native(t: raylib.Texture2D): Texture2D =
+proc to_nim(t: raylib.Texture2D): Texture2D =
   return Texture2D(id: t.id.int, w: t.width, h: t.height, mipmaps: t.mipmaps, format: PixelFormat(t.format.int))
 
-proc from_native(t: raylib.RenderTexture2D): RenderTexture2D =
+proc to_nim(t: raylib.RenderTexture2D): RenderTexture2D =
   let 
-    texture = from_native(t.texture)
-    depth = from_native(t.depth)
+    texture = to_nim(t.texture)
+    depth = to_nim(t.depth)
   return RenderTexture2D(id: t.id.int, texture: texture, depth: depth)
 
+proc to_nim(v: raylib.Vector2): Vector2 = 
+  return Vector2(x: v.x.float, y: v.y.float)
 
-# texture: from_native(t.texture), depth: from_native(t.depth)
+proc to_nim(color: raylib.Color): Color =
+  return Color(r: color.r.uint8, g: color.g.uint8, b: color.b.uint8, a: color.a.uint8)
+
+# texture: to_nim(t.texture), depth: to_nim(t.depth)
 
 
 proc init_window*(width: int, height: int, title: string) = 
@@ -208,10 +154,10 @@ proc window_should_close*(): bool =
   return raylib.WindowShouldClose()
 
 proc clear_background*(color : Color) =
-  raylib.ClearBackground(to_native(color))
+  raylib.ClearBackground(to_c(color))
 
 proc draw_dectangle*(x: int; y: int; w: int; h: int; color: Color) =
-  raylib.DrawRectangle(x.cint, y.cint, w.cint, h.cint, to_native(color))
+  raylib.DrawRectangle(x.cint, y.cint, w.cint, h.cint, to_c(color))
 
 proc begin_drawing*() =
   raylib.BeginDrawing()
@@ -224,21 +170,14 @@ template draw*(code: untyped): untyped =
   code
   raylib.EndDrawing()
 
-template draw_with*(canvas : RenderTexture2D, code: untyped): untyped =
-  let native_canvas = to_native(canvas)
+template with*(canvas : RenderTexture2D, code: untyped): untyped =
+  let native_canvas = to_c(canvas)
   raylib.BeginTextureMode(native_canvas)
   code
   raylib.EndTextureMode()
-  raylib.BeginDrawing()
-  raylib.ClearBackground(to_native(BLACK))
-  raylib.DrawTexturePro(native_canvas.texture, 
-    raylib.Rectangle(x:0, y:0, width:native_canvas.texture.width, height: -native_canvas.texture.height), 
-    raylib.Rectangle(x:0, y:0, width:1440, height: 810), 
-    raylib.Vector2(x:0, y:0), 0, to_native(WHITE))
-  raylib.EndDrawing()
-
+  
 proc begin_texture_mode*(texture: RenderTexture2D) = 
-  raylib.BeginTextureMode(to_native(texture))
+  raylib.BeginTextureMode(to_c(texture))
 
 proc end_texture_mode*() = 
   raylib.EndTextureMode()
@@ -248,32 +187,73 @@ proc close_window*() =
 
 proc load_render_texture*(width: int, height: cint): RenderTexture2D =
   let native = raylib.LoadRenderTexture(width.cint, height.cint)
-  result = from_native(native)
+  result = to_nim(native)
   raylib.SetTextureFilter(native.texture, ord(TextureFilterMode.FILTER_POINT.int))
 
 
 proc unload_render_texture*(texture: RenderTexture2D) =
-  raylib.UnloadRenderTexture(to_native(texture))
+  raylib.UnloadRenderTexture(to_c(texture))
 
 proc set_texture_filter*(texture: Texture2D; filterMode: TextureFilterMode) =
-  raylib.SetTextureFilter(to_native(texture), ord(filterMode).cint)
+  raylib.SetTextureFilter(to_c(texture), ord(filterMode).cint)
 
 # Textures
 proc load_texture*(file_name: string): Texture2D =
-  return from_native(raylib.LoadTexture(file_name))
+  return to_nim(raylib.LoadTexture(file_name))
 
 proc draw*(texture: Texture2d, x: int = 0, y: int = 0, tint: Color = WHITE) =
-  raylib.DrawTexture(to_native(texture), x.cint, y.cint, to_native(tint))
+  raylib.DrawTexture(to_c(texture), x.cint, y.cint, to_c(tint))
 
 proc draw*(texture: Texture2D, position: Vector2, tint: Color =  WHITE) =
-  raylib.DrawTextureV(to_native(texture), to_native(position), to_native(tint))
+  raylib.DrawTextureV(to_c(texture), to_c(position), to_c(tint))
 
 proc draw*(texture: Texture2D, position: Vector2, rotation: float, scale: float; tint: Color = WHITE) =
-  raylib.DrawTextureEx(to_native(texture), to_native(position), rotation.cfloat, scale.cfloat, to_native(tint))
+  raylib.DrawTextureEx(to_c(texture), to_c(position), rotation.cfloat, scale.cfloat, to_c(tint))
 
-proc draw*(texture: Texture2D; srcRect: Rectangle; dstRect: Rectangle; origin: Vector2 = Vector2(x: 0, y: 0); rotation: cfloat = 0.0; tint: Color = WHITE) = 
-  raylib.DrawTexturePro(to_native(texture), to_native(srcRect), to_native(dstRect), to_native(origin), rotation.cfloat, to_native(tint))
+proc draw*(texture: Texture2D; srcRect: Rectangle; dstRect: Rectangle; origin: Vector2 = Vector2(x: 0, y: 0); rotation: float = 0.0; tint: Color = WHITE) = 
+  raylib.DrawTexturePro(to_c(texture), to_c(srcRect), to_c(dstRect), to_c(origin), rotation.cfloat, to_c(tint))
 
 #proc DrawTextureRec*(texture: Texture2D; sourceRec: Rectangle; position: Vector2; tint: Color) {.stdcall, importc: "DrawTextureRec", dynlib: dynlibraylib.}
 
 
+# keyboard
+proc is_key_pressed*(key: Key): bool = return raylib.IsKeyPressed(ord(key).cint)
+
+proc is_key_down*(key: Key): bool = return raylib.IsKeyDown(ord(key).cint)
+
+proc is_key_released*(key: Key): bool = return raylib.IsKeyReleased(ord(key).cint)
+
+proc is_key_up*(key: Key): bool = return raylib.IsKeyUp(ord(key).cint)
+
+proc get_key_pressed*(): Key = return Key(raylib.GetKeyPressed())
+
+# mouse
+
+proc get_mouse_position*(): Vector2 = 
+  return to_nim(raylib.GetMousePosition())
+
+proc set_mouse_scale*(scale: float) =
+  raylib.SetMouseScale(scale.cfloat)
+
+# misc
+proc draw_fps*(x: int, y: int) =
+  raylib.DrawFPS(x.cint, y.cint)
+
+proc set_config_flags*(flags: int) =
+  raylib.SetConfigFlags(flags.cuchar)
+
+
+proc set_target_fps*(fps: int) =
+  raylib.SetTargetFPS(fps.cint)
+
+# 2d shapes
+# circles
+proc draw_circle_gradient*(position: Vector2, radius: float, incolor: Color, outcolor: Color) =
+  raylib.DrawCircleGradient(position.x.cint, position.y.cint, radius.float, to_c(incolor), to_c(outcolor))
+
+proc draw_rectangle*(rec: Rectangle, color: Color) =
+  raylib.DrawRectangleRec(rec.to_c, color.to_c)
+
+# color
+proc fade*(color: Color, alpha: float): Color =
+  return raylib.Fade(color.to_c, alpha.cfloat).to_nim

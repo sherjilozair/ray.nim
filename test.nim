@@ -67,15 +67,50 @@ UnloadRenderTexture(canvas)
 import ray
 const scale = 1
 
+set_config_flags(Flag.vsync_hint.ord)
 init_window(320*5, 180*5, "Test Title")
 var texture = load_texture("sprites.png")
-var canvas = load_render_texture(160, 90)
+var canvas = load_render_texture(320, 180)
+
+set_target_fps(60)
+
+var mouse: Vector2
+set_mouse_scale(1/5)
+
+var
+  x = 0
+  y = 0
 
 while not window_should_close():
-  draw_with(canvas):
-    for i in 0..<16:
-      for j in 0..<8:
-        draw(texture, Rectangle(x: 8*i, y: 8*j, w: 8, h: 8), Rectangle(x: 8*scale*i, y: 8*j*scale, w: 8*scale, h: 8*scale))
+  # update
+  if (is_key_down(Key.up)):
+    y -= 1
+  elif (is_key_down(Key.down)):
+    y += 1
+  if (is_key_down(Key.left)):
+    x -= 1
+  elif (is_key_down(Key.right)):
+    x += 1
+
+  mouse = get_mouse_position()
+  
+  clear_background(BLACK)
+
+  draw:
+    with(canvas):
+      for i in 0..<16:
+        for j in 0..<8:
+          #draw(texture, Rectangle(x: 8*i, y: 8*j, w: 8, h: 8), Rectangle(x: 8*scale*i, y: 8*j*scale, w: 8*scale, h: 8*scale))
+          draw_circle_gradient(mouse, 300, WHITE, BLANK)
+      for i in 0..<16:
+        for j in 0..<8:
+          draw_rectangle(Rectangle(x:mouse.x.int+i, y: mouse.y.int+j, w:10, h:10), WHITE)
+
+    draw(canvas.texture, Rectangle(x:0, y:0, w: canvas.texture.w, h: -canvas.texture.h), 
+      Rectangle(x:0, y:0, w:320*5, h: 180*4), Vector2(x:0, y:0), 0, fade(WHITE, 0.7))
+    
+
+    
 
 
 close_window()
